@@ -3,9 +3,23 @@
 k8s_yaml('deploy/kubernetes/manifests/sock-shop-ns.yaml')
 k8s_yaml('deploy/kubernetes/complete-demo.yaml')
 
-# Check if the microservices-demo-front-end directory exists.
-if str(local("ls ../microservices-demo-front-end")).strip():
-  repo = local_git_repo('../microservices-demo-front-end')
-  docker_build('weaveworksdemos/front-end', repo)
-else:
-  print('Could not find front-end repo. Skipping!')
+def exists(dir_name):
+  return bool(str(local("ls %s || exit 0" % dir_name)).strip())
+
+# Check if we have the repo for this image on disk,
+# and build it if we do.
+def build_if_exists(name):
+  dir_name = "../microservices-demo-%s" % name
+  image_name = "weaveworksdemos/%s" %name
+  if exists(dir_name):
+    docker_build(image_name, dir_name)
+  else:
+    print('Could not find front-end repo. Skipping!')
+
+build_if_exists('front-end')
+build_if_exists('catalogue')
+build_if_exists('carts')
+build_if_exists('orders')
+build_if_exists('shipping')
+build_if_exists('payment')
+build_if_exists('user')
