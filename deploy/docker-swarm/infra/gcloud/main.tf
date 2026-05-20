@@ -48,7 +48,7 @@ resource "google_compute_instance" "docker-swarm-node" {
     }
 
     provisioner "file" {
-        source = "join.sh",
+        source = "join.sh"
         destination = "/tmp/join.sh"
     }
 
