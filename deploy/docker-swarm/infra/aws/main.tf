@@ -80,7 +80,7 @@ resource "aws_instance" "ci-sockshop-docker-swarm-node" {
   }
 
   provisioner "file" {
-    source = "join.sh",
+    source = "join.sh"
     destination = "/tmp/join.sh"
   }
 
